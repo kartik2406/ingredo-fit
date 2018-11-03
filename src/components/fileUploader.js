@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
 import { FOOD_DATA } from '../utils/data'
-
+import './fileUploader.css'
 //TODO: seperate clarifai logic into utils
 
 export default class FileUploader extends Component {
@@ -98,7 +98,7 @@ export default class FileUploader extends Component {
           />
         </label>
         <br />
-        <button type="submit">Submit</button>
+        <button className="btn btn-primary" type="submit">Submit</button>
         <img src={uploadedImage} alt="" />
         <ul>
           {ingredients.map((ingredient, index) => {
