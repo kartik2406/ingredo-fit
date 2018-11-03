@@ -15,7 +15,7 @@ export default class FileUploader extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.app = new Clarifai.App({
-      apiKey: 'a62c9413669344ca8c4968130516a84b',
+      apiKey: process.env.CLARIFAI_API_KEY,
     })
   }
 
