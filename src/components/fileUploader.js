@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
+import Clarifai from 'clarifai'
 
 export default class FileUploader extends Component {
   constructor(props) {
@@ -7,7 +8,12 @@ export default class FileUploader extends Component {
     this.state = {
       progress: 0,
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.app = new Clarifai.App({
+      apiKey: 'a62c9413669344ca8c4968130516a84b'
+    });
+    this.concepts = [];
+    this.uploadedImage = "";
   }
 
   handleSubmit(event) {
@@ -37,13 +43,33 @@ export default class FileUploader extends Component {
         })
         uploadTask.snapshot.ref
           .getDownloadURL()
-          .then(downloadURL =>
+          .then(downloadURL => {
             console.log(
               `Your uploaded image is now available at ${downloadURL}`
             )
-          )
+            this.uploadedImage = downloadURL;
+            this.setImage(downloadURL);
+          })
       }
     )
+  }
+
+  setImage(url) {
+    this.app.models.predict("bd367be194cf45149e75f01d59f77ba7", url)
+      .then(
+        function(response) {
+          console.log(response);
+          // do something with response
+          var concepts = response['outputs'][0]['data']['concepts']
+          this.concepts = concepts.map( (object) => {
+            return <li>Name: {object.name} Value: {object.value}</li>
+          });
+          console.log(this.concepts);
+        },
+        function(err) {
+          // there was an error
+        }
+    );
   }
 
   render() {
@@ -62,6 +88,10 @@ export default class FileUploader extends Component {
         </label>
         <br />
         <button type="submit">Submit</button>
+        <img src={this.uploadedImage} alt=""/>
+        <ul>
+          {this.concepts}
+        </ul>
       </form>
     )
   }
