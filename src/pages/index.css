@@ -1,5 +1,7 @@
-#___gatsby{
-  background: linear-gradient(#1f9389, #a5d9a1);
+body {
+  background: linear-gradient(#1f9389, #a5d9a1) fixed;
   background-color: #1f9389;
-  height: 100%;
+}
+#___gatsby{
+  
 }
