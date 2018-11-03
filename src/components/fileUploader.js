@@ -2,18 +2,23 @@ import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
 
+//TODO: seperate clarifai logic into utils
+
 export default class FileUploader extends Component {
   constructor(props) {
     super(props)
     this.state = {
       progress: 0,
+      uploadedImage: null,
+      concepts: [],
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.setImage = this.setImage.bind(this)
     this.app = new Clarifai.App({
-      apiKey: 'a62c9413669344ca8c4968130516a84b'
-    });
-    this.concepts = [];
-    this.uploadedImage = "";
+      apiKey: 'a62c9413669344ca8c4968130516a84b',
+    })
+    this.concepts = []
+    this.uploadedImage = ''
   }
 
   handleSubmit(event) {
@@ -41,38 +46,38 @@ export default class FileUploader extends Component {
         this.setState({
           progress: 100,
         })
-        uploadTask.snapshot.ref
-          .getDownloadURL()
-          .then(downloadURL => {
-            console.log(
-              `Your uploaded image is now available at ${downloadURL}`
-            )
-            this.uploadedImage = downloadURL;
-            this.setImage(downloadURL);
+        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          console.log(`Your uploaded image is now available at ${downloadURL}`)
+          this.setState({
+            uploadedImage: downloadURL,
           })
+          this.setImage(downloadURL)
+        })
       }
     )
   }
 
   setImage(url) {
-    this.app.models.predict("bd367be194cf45149e75f01d59f77ba7", url)
-      .then(
-        function(response) {
-          console.log(response);
-          // do something with response
-          var concepts = response['outputs'][0]['data']['concepts']
-          this.concepts = concepts.map( (object) => {
-            return <li>Name: {object.name} Value: {object.value}</li>
-          });
-          console.log(this.concepts);
-        },
-        function(err) {
-          // there was an error
-        }
-    );
+    this.app.models.predict('bd367be194cf45149e75f01d59f77ba7', url).then(
+      response => {
+        console.log(response)
+        // do something with response
+        let concepts = response['outputs'][0]['data']['concepts']
+        // console.log(concepts)
+        this.setState({
+          concepts,
+        })
+
+        console.log('concepts', this.state.concepts)
+      },
+      err => {
+        // there was an error
+      }
+    )
   }
 
   render() {
+    let {uploadedImage, concepts} = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -88,10 +93,10 @@ export default class FileUploader extends Component {
         </label>
         <br />
         <button type="submit">Submit</button>
-        <img src={this.uploadedImage} alt=""/>
-        <ul>
-          {this.concepts}
-        </ul>
+        <img src={uploadedImage} alt="" />
+        <ul>{concepts.map( (concept, index) => {
+          return <li key={index}>Name: {concept.name} Value: {concept.value}</li>
+        })}</ul>
       </form>
     )
   }
