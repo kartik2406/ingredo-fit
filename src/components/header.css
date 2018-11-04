@@ -22,3 +22,8 @@
     padding: 0.1em 2.5em 0.2em;
   }
 }
+@media only screen and (max-width: 540px) {
+  .header .header-content .app-name {
+    font-size: 2em;
+  }
+}
