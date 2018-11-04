@@ -57,10 +57,7 @@ class Layout extends React.Component {
             />
             <div
               style={{
-                margin: '1.45rem auto 0',
-                maxWidth: 960,
-                padding: '0px 1.0875rem 1.45rem',
-                paddingTop: 0,
+                margin: '0 auto',
               }}
             >
               {children}
