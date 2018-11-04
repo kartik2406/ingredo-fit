@@ -8,7 +8,7 @@ This app will help you keep track of what food items you are consuming, give you
 
 
 ### Current Features
-[x] Responsive design
+[] Responsive design
 [x] User can upload an image
 [x] Ingredient, calorie list
 

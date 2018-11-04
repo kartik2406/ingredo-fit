@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby default starter",
+  "name": "ingredo-fit",
+  "description": "Analyze your meals, get calorie, nutrional value of the ingredients.",
   "version": "1.0.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "authors": ["Vipul Dessai", "Kartik Malik"],
   "dependencies": {
     "clarifai": "^2.9.0",
     "firebase": "^5.5.7",
@@ -19,7 +19,9 @@
     "react-helmet": "^5.2.0"
   },
   "keywords": [
-    "gatsby"
+    "fitness",
+    "health",
+    "meal"
   ],
   "license": "MIT",
   "scripts": {
@@ -34,6 +36,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/kartik2406/ingredo-fit"
   }
 }
