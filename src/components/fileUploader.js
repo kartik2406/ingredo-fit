@@ -99,7 +99,7 @@ export default class FileUploader extends Component {
       <form onSubmit={this.handleSubmit}>
         <div className="upload">
           <div className="uploadedDetails">
-            <div class="meal">
+            <div className="meal">
               <div>
                 <img src={uploadedImage} alt="" />
               </div>
