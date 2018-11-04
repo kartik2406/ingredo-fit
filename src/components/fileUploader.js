@@ -86,8 +86,8 @@ export default class FileUploader extends Component {
     let { uploadedImage, ingredients } = this.state
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          Upload file:
+      <ul className="upload-image">
+        <li>
           <input
             type="file"
             accept="image/*"
@@ -96,9 +96,9 @@ export default class FileUploader extends Component {
               this.fileInput = input
             }}
           />
-        </label>
-        <br />
-        <button className="btn btn-primary" type="submit">Submit</button>
+        </li>
+        <li><button className="btn btn-primary" type="submit">Submit</button></li>
+      </ul>
         <img src={uploadedImage} alt="" />
         <ul>
           {ingredients.map((ingredient, index) => {

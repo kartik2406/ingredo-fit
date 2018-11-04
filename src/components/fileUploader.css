@@ -16,3 +16,12 @@ li{
 image{
   width: 400px;
 }
+.upload-image {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0
+}
+.upload-image li {
+  margin: 0
+}
