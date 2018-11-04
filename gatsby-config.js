@@ -25,13 +25,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'gatsby-starter-default',
-        short_name: 'starter',
+        name: 'Ingredo-Fit',
+        short_name: 'IngredoFit',
         start_url: '/',
-        background_color: '#663399',
-        theme_color: '#663399',
+        background_color: '#a5d9a1',
+        theme_color: '#1f9389',
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
+        icon: 'src/images/icon.png', // This path is relative to the root of the site.
       },
     },
     'gatsby-plugin-offline',
