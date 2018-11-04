@@ -16,3 +16,9 @@
   font-size: 2em;
   padding: 0.2em 2.5em 0.4em;
 }
+@media only screen and (max-width: 1500px) {
+  .header .header-content .app-name {
+    font-size: 1.5em;
+    padding: 0.1em 2.5em 0.2em;
+  }
+}
