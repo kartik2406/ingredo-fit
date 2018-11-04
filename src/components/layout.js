@@ -25,7 +25,7 @@ class Layout extends React.Component {
     })
     let { width } = this.state
     //reset the progress once 100%
-    if (width == '100%') {
+    if (width === '100%') {
       setTimeout(() => this.setState({ width: '0%' }), 1000)
     }
     return (
@@ -53,7 +53,7 @@ class Layout extends React.Component {
             <Header siteTitle={data.site.siteMetadata.title} />
             <div
               className="progress-bar"
-              style={{ width, transition: width == '0%' ? 'none' : '1s' }}
+              style={{ width, transition: width === '0%' ? 'none' : '1s' }}
             />
             <div
               style={{

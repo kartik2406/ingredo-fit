@@ -87,7 +87,7 @@ export default class FileUploader extends Component {
         let concepts = response['outputs'][0]['data']['concepts']
 
         let ingredients = concepts.map(concept => {
-          let ingredient = FOOD_DATA.find(food => food.name == concept.name)
+          let ingredient = FOOD_DATA.find(food => food.name === concept.name)
           return {
             ...concept,
             ...ingredient,
@@ -112,9 +112,12 @@ export default class FileUploader extends Component {
     const submitBtnClasses = classNames('btn', 'btn-primary', {
       'btn-dsabled': !fileSelected,
     })
+    const uploadDivClasses = classNames('upload', {
+      'centerly': !uploadedImage,
+    })
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className="upload">
+        <div className={uploadDivClasses} >
           {uploadedImage ? (
             <div className="uploadedDetails">
               <div className="meal">
@@ -238,7 +241,12 @@ export default class FileUploader extends Component {
         </div>
         <div className="aboutApp">
           <h4>About App</h4>
-          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi, libero? Vitae pariatur ducimus delectus laborum consequuntur. Asperiores itaque aliquam enim?</p>
+          <p>
+            This app will help you keep track of what food items you are consuming, 
+            give you their calorie, nutritional value. Just upload a pic of your meal,
+            and let the app do its magic. It will give you a list of ingredients in your meal, 
+            calories and nutrients of each item. This way you know what you are consuming.
+          </p>
         </div>
       </form>
     )

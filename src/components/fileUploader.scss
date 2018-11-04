@@ -22,11 +22,6 @@ li{
 image{
   width: 400px;
 }
-td {
-  @media only screen and (max-width: map-get($map: $sizes, $key: mobile)) {
-    text-align: center;
-  }
-}
 .height-100 {
   height: 100%;
 }
@@ -48,11 +43,17 @@ td {
         opacity: 0;
         width: 26em;
         height: 2em;
+        @media only screen and (max-width: map-get($map: $sizes, $key: mobile)) {
+          width: 20em;
+        }
       }
       .fake-image-text {
         position: relative;
         width: 20em;
         height: 2em;
+        @media only screen and (max-width: map-get($map: $sizes, $key: mobile)) {
+          width: 14em;
+        }
       }
       button {
         width: 6em;
@@ -140,7 +141,14 @@ td {
     }
   }
 }
+.centerly {
+  margin-top: 30vh;
+  @media only screen and (max-width: map-get($map: $sizes, $key: mobile)) {
+    margin-top: 15vh;
+  }
+}
 .aboutApp {
   text-align: center;
   color: #fff;
+  padding: 1em;
 }
