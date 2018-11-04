@@ -634,16 +634,7 @@ pre tt:after {
 .progress-bar {
   height: 5px;
   background: linear-gradient(to right, #f1e6d9, #ff6151);
-  animation: progress 4s ease-out infinite;
+  width: 0%;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-}
-
-@keyframes progress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
 }

@@ -10,20 +10,24 @@ class Layout extends React.Component {
   constructor() {
     super()
     this.state = {
-      isLoading: false,
+      width: '0%',
     }
     this.onLoadStateChange = this.onLoadStateChange.bind(this)
   }
-  onLoadStateChange(isLoading) {
-    this.setState({ isLoading })
+  onLoadStateChange(width) {
+    this.setState({ width })
   }
   render() {
     const children = React.Children.map(this.props.children, child => {
       return React.cloneElement(child, {
-        onLoadStateChange: this.onLoadStateChange
-      });
-    });
-    let { isLoading } = this.state
+        onLoadStateChange: this.onLoadStateChange,
+      })
+    })
+    let { width } = this.state
+    //reset the progress once 100%
+    if (width == '100%') {
+      setTimeout(() => this.setState({ width: '0%' }), 1000)
+    }
     return (
       <StaticQuery
         query={graphql`
@@ -47,7 +51,10 @@ class Layout extends React.Component {
               <html lang="en" />
             </Helmet>
             <Header siteTitle={data.site.siteMetadata.title} />
-            {isLoading ? <div className="progress-bar" /> : <div className="progress-bar-ph" /> }
+            <div
+              className="progress-bar"
+              style={{ width, transition: width == '0%' ? 'none' : '1s' }}
+            />
             <div
               style={{
                 margin: '1.45rem auto 0',
