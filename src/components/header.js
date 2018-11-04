@@ -1,19 +1,16 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
+import './header.css'
+
 const Header = ({ siteTitle }) => (
   <div
-    style={{
-      background: 'white'
-    }}
+  className="header"
   >
     <div
-      style={{
-        margin: '0 auto',
-        padding: '1em'
-      }}
+    className="header-content"
     >
-      <h1 className="header" style={{ margin: 0, background: '-webkit-linear-gradient(#1f9389, #a5d9a1)', '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent', }}>
+      <h1 className="app-name">
         <Link
           to="/"
           style={{

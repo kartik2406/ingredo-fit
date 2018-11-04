@@ -628,3 +628,19 @@ pre tt:after {
     background: linear-gradient(#1f9389, #a5d9a1);
   }
 }
+.progress-bar-ph {
+  height: 5px;
+}
+.progress-bar {
+  height: 5px;
+  background: linear-gradient(to right, #f1e6d9, #ff6151);
+  width: 0%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: absolute;
+}
+@media only screen and (max-width: 480px) {
+  .progress-bar {
+    height: 0.5em;
+  }
+}
