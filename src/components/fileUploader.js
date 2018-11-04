@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
+import classNames from 'classnames'
 import { FOOD_DATA } from '../utils/data'
 import './fileUploader.scss'
 import Food from '../assets/icons/food.svg'
@@ -17,18 +18,27 @@ export default class FileUploader extends Component {
       progress: 0,
       uploadedImage: null,
       ingredients: [],
+      fileSelected: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.app = new Clarifai.App({
       apiKey: 'a62c9413669344ca8c4968130516a84b',
     })
   }
-
+  handleChange() {
+    this.setState({
+      fileSelected: true,
+    })
+  }
   handleSubmit(event) {
-     let {onLoadStateChange} = this.props;
+    let { onLoadStateChange } = this.props
     onLoadStateChange('25%') //start the loader
     event.preventDefault()
     const file = this.fileInput.files[0]
+    this.setState({
+      uploadedImage: null,
+      ingredients: [],
+    })
     let uploadTask = storage
       .ref()
       .child(file.name)
@@ -57,14 +67,14 @@ export default class FileUploader extends Component {
             uploadedImage: downloadURL,
           })
           this.setImage(downloadURL)
-          onLoadStateChange('75%') 
+          onLoadStateChange('75%')
         })
       }
     )
   }
 
   setImage(url) {
-    let {onLoadStateChange} = this.props;
+    let { onLoadStateChange } = this.props
 
     this.app.models.predict('bd367be194cf45149e75f01d59f77ba7', url).then(
       response => {
@@ -94,83 +104,94 @@ export default class FileUploader extends Component {
   }
 
   render() {
-    let { uploadedImage, ingredients } = this.state
+    let { uploadedImage, ingredients, fileSelected } = this.state
+    const submitBtnClasses = classNames('btn', 'btn-primary', {
+      'btn-dsabled': !fileSelected,
+    })
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="upload">
-          <div className="uploadedDetails">
-            <div className="meal">
-              <div>
-                <img src={uploadedImage} alt="" />
+          {uploadedImage ? (
+            <div className="uploadedDetails">
+              <div className="meal">
+                <div>
+                  <img src={uploadedImage} alt="" />
+                </div>
               </div>
-            </div>
-            <div className="ingredients">
-              <div className="table-header">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Ingredient Name</th>
-                      <th>Calories</th>
-                      <th>Protein</th>
-                      <th>Vitamin C</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-              <div className="table-body">
-                <table>
-                  <tbody>
-                  { ingredients.map( (ingredient, index) => {
-                    return (
-                      <tr className="ingredient" key={index}>
-                        <td className="icon">
-                          <Food
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.name}</span>
-                        </td>
-                        <td className="icon">
-                          <Calorie
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.calories}</span>
-                        </td>
-                        <td className="icon">
-                          <Protein
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.protein}</span>
-                        </td>
-                        <td className="icon">
-                          <C
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.c} </span>
-                        </td>
+              <div className="ingredients">
+                <div className="table-header">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ingredient Name</th>
+                        <th>Calories</th>
+                        <th>Protein</th>
+                        <th>Vitamin C</th>
                       </tr>
-                    )
-                  }) }
-                  </tbody>
-                </table>
+                    </thead>
+                  </table>
+                </div>
+                <div className="table-body">
+                  <table>
+                    <tbody>
+                      {ingredients.map((ingredient, index) => {
+                        return (
+                          <tr className="ingredient" key={index}>
+                            <td className="icon">
+                              <Food
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value"> {ingredient.name}</span>
+                            </td>
+                            <td className="icon">
+                              <Calorie
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value">
+                                {' '}
+                                {ingredient.calories}
+                              </span>
+                            </td>
+                            <td className="icon">
+                              <Protein
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value">
+                                {' '}
+                                {ingredient.protein}
+                              </span>
+                            </td>
+                            <td className="icon">
+                              <C
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value"> {ingredient.c} </span>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
           <div className="uploadPlaceholder">
             <ul className="upload-image">
               <li>
@@ -181,10 +202,12 @@ export default class FileUploader extends Component {
                   ref={input => {
                     this.fileInput = input
                   }}
+                  onChange={() => this.handleChange()}
+                  required
                 />
               </li>
               <li>
-                <button className="btn btn-primary" type="submit">
+                <button className={submitBtnClasses} type="submit">
                   Submit
                 </button>
               </li>
