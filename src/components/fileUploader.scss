@@ -13,7 +13,10 @@ $sizes: (
 .btn-primary {
   background-color: #ff6151;
 }
-
+.btn-dsabled{
+  opacity: 0.7;
+  cursor: not-allowed;
+}
 li{
   list-style: none;
 }

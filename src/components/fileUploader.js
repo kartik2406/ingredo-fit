@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
+import classNames from 'classnames'
 import { FOOD_DATA } from '../utils/data'
 import './fileUploader.scss'
 import Food from '../assets/icons/food.svg'
@@ -17,18 +18,27 @@ export default class FileUploader extends Component {
       progress: 0,
       uploadedImage: null,
       ingredients: [],
+      fileSelected: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.app = new Clarifai.App({
       apiKey: 'a62c9413669344ca8c4968130516a84b',
     })
   }
-
+  handleChange() {
+    this.setState({
+      fileSelected: true,
+    })
+  }
   handleSubmit(event) {
     let { onLoadStateChange } = this.props
     onLoadStateChange('25%') //start the loader
     event.preventDefault()
     const file = this.fileInput.files[0]
+    this.setState({
+      uploadedImage: null,
+      ingredients: [],
+    })
     let uploadTask = storage
       .ref()
       .child(file.name)
@@ -94,7 +104,10 @@ export default class FileUploader extends Component {
   }
 
   render() {
-    let { uploadedImage, ingredients } = this.state
+    let { uploadedImage, ingredients, fileSelected } = this.state
+    const submitBtnClasses = classNames('btn', 'btn-primary', {
+      'btn-dsabled': !fileSelected,
+    })
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="upload">
@@ -189,10 +202,12 @@ export default class FileUploader extends Component {
                   ref={input => {
                     this.fileInput = input
                   }}
+                  onChange={() => this.handleChange()}
+                  required
                 />
               </li>
               <li>
-                <button className="btn btn-primary" type="submit">
+                <button className={submitBtnClasses} type="submit">
                   Submit
                 </button>
               </li>
