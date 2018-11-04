@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
 import { FOOD_DATA } from '../utils/data'
-import './fileUploader.css'
+import './fileUploader.scss'
 import Food from '../assets/icons/food.svg'
 import Calorie from '../assets/icons/calorie.svg'
 import Protein from '../assets/icons/protein.svg'
@@ -91,72 +91,100 @@ export default class FileUploader extends Component {
     let { uploadedImage, ingredients } = this.state
     return (
       <form onSubmit={this.handleSubmit}>
-        <ul className="upload-image">
-          <li>
-            <input
-              type="file"
-              accept="image/*"
-              multiple={false}
-              ref={input => {
-                this.fileInput = input
-              }}
-            />
-          </li>
-          <li>
-            <button className="btn btn-primary" type="submit">
-              Submit
-            </button>
-          </li>
-        </ul>
-        <img src={uploadedImage} alt="" />
-        <ul className="ingredients">
-          {ingredients.map((ingredient, index) => {
-            return (
-              <li className="ingredient" key={index}>
-                <span className="icon">
-                  <Food
-                    style={{
-                      fill: '#ff6151',
-                      height: '24px',
-                      width: '24px',
-                    }}
-                  />
-                  <span className="value"> {ingredient.name}</span>
-                </span>
-                <span className="icon">
-                  <Calorie
-                    style={{
-                      fill: '#ff6151',
-                      height: '24px',
-                      width: '24px',
-                    }}
-                  />
-                  <span className="value"> {ingredient.calories}</span>
-                </span>
-                <span className="icon">
-                  <Protein
-                    style={{
-                      fill: '#ff6151',
-                      height: '24px',
-                      width: '24px',
-                    }}
-                  />
-                  <span className="value"> {ingredient.protein}</span>
-                </span>
-                <span className="icon">
-                  <C
-                    style={{
-                      fill: '#ff6151',
-                      height: '24px',
-                      width: '24px',
-                    }}
-                  />
-                  <span className="value"> {ingredient.c} </span>
-                </span>
+        <div className="upload">
+          <div className="uploadedDetails">
+            <div class="meal">
+              <div>
+                <img src={uploadedImage} alt="" />
+              </div>
+            </div>
+            <div className="ingredients">
+              <div className="table-header">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Ingredient Name</th>
+                      <th>Calories</th>
+                      <th>Protein</th>
+                      <th>Vitamin C</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div className="table-body">
+                <table>
+                  <tbody>
+                  { ingredients.map( (ingredient, index) => {
+                    return (
+                      <tr className="ingredient" key={index}>
+                        <td className="icon">
+                          <Food
+                            style={{
+                              fill: '#ff6151',
+                              height: '24px',
+                              width: '24px',
+                            }}
+                          />
+                          <span className="value"> {ingredient.name}</span>
+                        </td>
+                        <td className="icon">
+                          <Calorie
+                            style={{
+                              fill: '#ff6151',
+                              height: '24px',
+                              width: '24px',
+                            }}
+                          />
+                          <span className="value"> {ingredient.calories}</span>
+                        </td>
+                        <td className="icon">
+                          <Protein
+                            style={{
+                              fill: '#ff6151',
+                              height: '24px',
+                              width: '24px',
+                            }}
+                          />
+                          <span className="value"> {ingredient.protein}</span>
+                        </td>
+                        <td className="icon">
+                          <C
+                            style={{
+                              fill: '#ff6151',
+                              height: '24px',
+                              width: '24px',
+                            }}
+                          />
+                          <span className="value"> {ingredient.c} </span>
+                        </td>
+                      </tr>
+                    )
+                  }) }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="uploadPlaceholder">
+            <ul className="upload-image">
+              <li>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple={false}
+                  ref={input => {
+                    this.fileInput = input
+                  }}
+                />
               </li>
-            )
-          })}
-        </ul>
+              <li>
+                <button className="btn btn-primary" type="submit">
+                  Submit
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </form>
     )
   }
