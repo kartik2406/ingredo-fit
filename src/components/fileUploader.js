@@ -93,6 +93,9 @@ export default class FileUploader extends Component {
     )
   }
 
+  handleChange(event) {
+    var foo= {}
+  }
   render() {
     let { uploadedImage, ingredients } = this.state
     return (
@@ -174,14 +177,23 @@ export default class FileUploader extends Component {
           <div className="uploadPlaceholder">
             <ul className="upload-image">
               <li>
-                <input
+                <input className="real-image-uploader"
                   type="file"
                   accept="image/*"
                   multiple={false}
                   ref={input => {
                     this.fileInput = input
                   }}
+                  onChange={(e) => {this.handleChange(e)}}
                 />
+                <input className="fake-image-text"
+                  type="text"
+                />
+              </li>
+              <li>
+                <button className="btn btn-primary" type="button">
+                  Select
+                </button>
               </li>
               <li>
                 <button className="btn btn-primary" type="submit">
