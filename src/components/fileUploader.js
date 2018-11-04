@@ -19,15 +19,17 @@ export default class FileUploader extends Component {
       uploadedImage: null,
       ingredients: [],
       fileSelected: false,
+      fileName: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.app = new Clarifai.App({
       apiKey: 'a62c9413669344ca8c4968130516a84b',
     })
   }
-  handleChange() {
+  handleChange(event) {
     this.setState({
       fileSelected: true,
+      fileName: event.target.files[0].name,
     })
   }
   handleSubmit(event) {
@@ -72,7 +74,9 @@ export default class FileUploader extends Component {
       }
     )
   }
-
+  handleSelect() {
+    this.fileInput.click()
+  }
   setImage(url) {
     let { onLoadStateChange } = this.props
 
@@ -102,9 +106,9 @@ export default class FileUploader extends Component {
       }
     )
   }
-  
+
   render() {
-    let { uploadedImage, ingredients, fileSelected } = this.state
+    let { uploadedImage, ingredients, fileSelected, fileName } = this.state
     const submitBtnClasses = classNames('btn', 'btn-primary', {
       'btn-dsabled': !fileSelected,
     })
@@ -195,22 +199,32 @@ export default class FileUploader extends Component {
           <div className="uploadPlaceholder">
             <ul className="upload-image">
               <li>
-                <input className="real-image-uploader"
+                <input
+                  className="real-image-uploader"
                   type="file"
                   accept="image/*"
                   multiple={false}
                   ref={input => {
                     this.fileInput = input
                   }}
-                  onChange={() => this.handleChange()}
+                  onChange={event => this.handleChange(event)}
                   required
                 />
-                <input className="fake-image-text"
+                <input
+                  className="fake-image-text"
                   type="text"
+                  value={fileName}
+                  onChange={() => {}}
                 />
               </li>
               <li>
-                <button className="btn btn-primary" type="button">
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={() => {
+                    this.handleSelect()
+                  }}
+                >
                   Select
                 </button>
               </li>
