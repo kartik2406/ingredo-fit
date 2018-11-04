@@ -5,8 +5,18 @@
  */
 
 // You can delete this file if you're not using it
-exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage }) => {
+  if (stage === 'build-html') {
     actions.setWebpackConfig({
-        devtool: 'inline-source-map'
+      devtool: 'inline-source-map',
+      module: {
+        rules: [
+          {
+            test: /firebase/,
+            use: ['null-loader'],
+          },
+        ],
+      },
     })
+  }
 }

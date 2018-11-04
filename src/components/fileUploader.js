@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { storage } from '../utils/firebase'
-import Clarifai from 'clarifai'
+import { getIngredients } from '../utils/clarifai'
 import { FOOD_DATA } from '../utils/data'
 import './fileUploader.css'
 //TODO: seperate clarifai logic into utils
@@ -14,9 +14,6 @@ export default class FileUploader extends Component {
       ingredients: [],
     }
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.app = new Clarifai.App({
-      apiKey: 'a62c9413669344ca8c4968130516a84b',
-    })
   }
 
   handleSubmit(event) {
@@ -56,19 +53,19 @@ export default class FileUploader extends Component {
   }
 
   setImage(url) {
-    this.app.models.predict('bd367be194cf45149e75f01d59f77ba7', url).then(
+    getIngredients(url).then(
       response => {
         console.log(response)
         // do something with response
-        let concepts = response['outputs'][0]['data']['concepts'];
-        
-        let ingredients = concepts.map(concept =>{
+        let concepts = response['outputs'][0]['data']['concepts']
+
+        let ingredients = concepts.map(concept => {
           let ingredient = FOOD_DATA.find(food => food.name == concept.name)
           return {
             ...concept,
-            ...ingredient
+            ...ingredient,
           }
-        }) 
+        })
         // console.log(concepts)
         this.setState({
           ingredients,
@@ -104,7 +101,8 @@ export default class FileUploader extends Component {
           {ingredients.map((ingredient, index) => {
             return (
               <li key={index}>
-                Name: {ingredient.name} Calories: {ingredient.calories} Protein: {ingredient.protein} Vitamin C: {ingredient.c}
+                Name: {ingredient.name} Calories: {ingredient.calories} Protein:{' '}
+                {ingredient.protein} Vitamin C: {ingredient.c}
               </li>
             )
           })}
