@@ -4,9 +4,9 @@ import Layout from '../components/layout'
 import FileUploader from '../components/fileUploader'
 import './index.css'
 
-const IndexPage = () => (
+const IndexPage = ({onLoadStateChange}) => (
   <Layout>
-    <FileUploader />
+    <FileUploader onLoadStateChange={onLoadStateChange}/>
   </Layout>
 )
 

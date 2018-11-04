@@ -25,6 +25,8 @@ export default class FileUploader extends Component {
   }
 
   handleSubmit(event) {
+     let {onLoadStateChange} = this.props;
+    onLoadStateChange(true) //start the loader
     event.preventDefault()
     const file = this.fileInput.files[0]
     let uploadTask = storage
@@ -61,6 +63,8 @@ export default class FileUploader extends Component {
   }
 
   setImage(url) {
+    let {onLoadStateChange} = this.props;
+
     this.app.models.predict('bd367be194cf45149e75f01d59f77ba7', url).then(
       response => {
         console.log(response)
@@ -80,6 +84,7 @@ export default class FileUploader extends Component {
         })
 
         console.log('concepts', this.state.ingredients)
+        onLoadStateChange(false)
       },
       err => {
         // there was an error
