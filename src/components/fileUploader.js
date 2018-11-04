@@ -25,7 +25,7 @@ export default class FileUploader extends Component {
   }
 
   handleSubmit(event) {
-     let {onLoadStateChange} = this.props;
+    let { onLoadStateChange } = this.props
     onLoadStateChange('25%') //start the loader
     event.preventDefault()
     const file = this.fileInput.files[0]
@@ -57,14 +57,14 @@ export default class FileUploader extends Component {
             uploadedImage: downloadURL,
           })
           this.setImage(downloadURL)
-          onLoadStateChange('75%') 
+          onLoadStateChange('75%')
         })
       }
     )
   }
 
   setImage(url) {
-    let {onLoadStateChange} = this.props;
+    let { onLoadStateChange } = this.props
 
     this.app.models.predict('bd367be194cf45149e75f01d59f77ba7', url).then(
       response => {
@@ -98,79 +98,87 @@ export default class FileUploader extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="upload">
-          <div className="uploadedDetails">
-            <div className="meal">
-              <div>
-                <img src={uploadedImage} alt="" />
+          {uploadedImage ? (
+            <div className="uploadedDetails">
+              <div className="meal">
+                <div>
+                  <img src={uploadedImage} alt="" />
+                </div>
               </div>
-            </div>
-            <div className="ingredients">
-              <div className="table-header">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Ingredient Name</th>
-                      <th>Calories</th>
-                      <th>Protein</th>
-                      <th>Vitamin C</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-              <div className="table-body">
-                <table>
-                  <tbody>
-                  { ingredients.map( (ingredient, index) => {
-                    return (
-                      <tr className="ingredient" key={index}>
-                        <td className="icon">
-                          <Food
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.name}</span>
-                        </td>
-                        <td className="icon">
-                          <Calorie
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.calories}</span>
-                        </td>
-                        <td className="icon">
-                          <Protein
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.protein}</span>
-                        </td>
-                        <td className="icon">
-                          <C
-                            style={{
-                              fill: '#ff6151',
-                              height: '24px',
-                              width: '24px',
-                            }}
-                          />
-                          <span className="value"> {ingredient.c} </span>
-                        </td>
+              <div className="ingredients">
+                <div className="table-header">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ingredient Name</th>
+                        <th>Calories</th>
+                        <th>Protein</th>
+                        <th>Vitamin C</th>
                       </tr>
-                    )
-                  }) }
-                  </tbody>
-                </table>
+                    </thead>
+                  </table>
+                </div>
+                <div className="table-body">
+                  <table>
+                    <tbody>
+                      {ingredients.map((ingredient, index) => {
+                        return (
+                          <tr className="ingredient" key={index}>
+                            <td className="icon">
+                              <Food
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value"> {ingredient.name}</span>
+                            </td>
+                            <td className="icon">
+                              <Calorie
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value">
+                                {' '}
+                                {ingredient.calories}
+                              </span>
+                            </td>
+                            <td className="icon">
+                              <Protein
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value">
+                                {' '}
+                                {ingredient.protein}
+                              </span>
+                            </td>
+                            <td className="icon">
+                              <C
+                                style={{
+                                  fill: '#ff6151',
+                                  height: '24px',
+                                  width: '24px',
+                                }}
+                              />
+                              <span className="value"> {ingredient.c} </span>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
           <div className="uploadPlaceholder">
             <ul className="upload-image">
               <li>

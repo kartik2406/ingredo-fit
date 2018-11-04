@@ -44,6 +44,7 @@ td {
   .uploadedDetails {
     display: flex;
     justify-content: center;
+    animation: FadeIn 2s ease-in forwards;
     .meal {
       /* border: 1px solid black; */
       width: 60%;
@@ -101,6 +102,13 @@ td {
     }
     @media only screen and (max-width: map-get($map: $sizes, $key: mobile)) {
       flex-direction: column;
+    }
+  }
+  @keyframes FadeIn {
+    from{
+      opacity: 0;
+    } to {
+      opacity: 1;
     }
   }
 }
