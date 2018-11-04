@@ -214,13 +214,17 @@ export default class FileUploader extends Component {
                   Select
                 </button>
               </li>
-              <li>
-                <button className={submitBtnClasses} type="submit">
-                  Submit
-                </button>
-              </li>
             </ul>
+            <div className="submitButtonContainer">
+              <button className={submitBtnClasses} type="submit">
+                Submit
+              </button>
+            </div>
           </div>
+        </div>
+        <div className="aboutApp">
+          <h4>About App</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi, libero? Vitae pariatur ducimus delectus laborum consequuntur. Asperiores itaque aliquam enim?</p>
         </div>
       </form>
     )
