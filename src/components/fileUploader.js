@@ -3,6 +3,11 @@ import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
 import { FOOD_DATA } from '../utils/data'
 import './fileUploader.css'
+import Food from '../assets/icons/food.svg'
+import Calorie from '../assets/icons/calorie.svg'
+import Protein from '../assets/icons/protein.svg'
+import C from '../assets/icons/c.svg'
+
 //TODO: seperate clarifai logic into utils
 
 export default class FileUploader extends Component {
@@ -60,15 +65,15 @@ export default class FileUploader extends Component {
       response => {
         console.log(response)
         // do something with response
-        let concepts = response['outputs'][0]['data']['concepts'];
-        
-        let ingredients = concepts.map(concept =>{
+        let concepts = response['outputs'][0]['data']['concepts']
+
+        let ingredients = concepts.map(concept => {
           let ingredient = FOOD_DATA.find(food => food.name == concept.name)
           return {
             ...concept,
-            ...ingredient
+            ...ingredient,
           }
-        }) 
+        })
         // console.log(concepts)
         this.setState({
           ingredients,
@@ -86,25 +91,68 @@ export default class FileUploader extends Component {
     let { uploadedImage, ingredients } = this.state
     return (
       <form onSubmit={this.handleSubmit}>
-      <ul className="upload-image">
-        <li>
-          <input
-            type="file"
-            accept="image/*"
-            multiple={false}
-            ref={input => {
-              this.fileInput = input
-            }}
-          />
-        </li>
-        <li><button className="btn btn-primary" type="submit">Submit</button></li>
-      </ul>
+        <ul className="upload-image">
+          <li>
+            <input
+              type="file"
+              accept="image/*"
+              multiple={false}
+              ref={input => {
+                this.fileInput = input
+              }}
+            />
+          </li>
+          <li>
+            <button className="btn btn-primary" type="submit">
+              Submit
+            </button>
+          </li>
+        </ul>
         <img src={uploadedImage} alt="" />
-        <ul>
+        <ul className="ingredients">
           {ingredients.map((ingredient, index) => {
             return (
-              <li key={index}>
-                Name: {ingredient.name} Calories: {ingredient.calories} Protein: {ingredient.protein} Vitamin C: {ingredient.c}
+              <li className="ingredient" key={index}>
+                <span className="icon">
+                  <Food
+                    style={{
+                      fill: '#ff6151',
+                      height: '24px',
+                      width: '24px',
+                    }}
+                  />
+                  <span className="value"> {ingredient.name}</span>
+                </span>
+                <span className="icon">
+                  <Calorie
+                    style={{
+                      fill: '#ff6151',
+                      height: '24px',
+                      width: '24px',
+                    }}
+                  />
+                  <span className="value"> {ingredient.calories}</span>
+                </span>
+                <span className="icon">
+                  <Protein
+                    style={{
+                      fill: '#ff6151',
+                      height: '24px',
+                      width: '24px',
+                    }}
+                  />
+                  <span className="value"> {ingredient.protein}</span>
+                </span>
+                <span className="icon">
+                  <C
+                    style={{
+                      fill: '#ff6151',
+                      height: '24px',
+                      width: '24px',
+                    }}
+                  />
+                  <span className="value"> {ingredient.c} </span>
+                </span>
               </li>
             )
           })}
