@@ -625,7 +625,6 @@ pre tt:after {
 @media only screen and (max-width: 480px) {
   html {
     font-size: 100%;
-    background: linear-gradient(#1f9389, #a5d9a1);
   }
 }
 .progress-bar-ph {
@@ -638,6 +637,7 @@ pre tt:after {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   position: absolute;
+  z-index: 1;
 }
 @media only screen and (max-width: 480px) {
   .progress-bar {
