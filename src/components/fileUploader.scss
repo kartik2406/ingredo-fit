@@ -116,6 +116,12 @@ image {
       color: #333333;
       .table-header {
         padding: 0 0.5em;
+        tr th {
+          @media only screen and (max-width: map-get($map: $sizes, $key: mobile)) {
+            font-size: 0.8rem;
+            padding-right: 0.5rem;
+          }
+        }
       }
       .table-body {
         overflow: auto;
