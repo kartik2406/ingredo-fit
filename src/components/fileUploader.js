@@ -102,7 +102,7 @@ export default class FileUploader extends Component {
       }
     )
   }
-
+  
   render() {
     let { uploadedImage, ingredients, fileSelected } = this.state
     const submitBtnClasses = classNames('btn', 'btn-primary', {
@@ -195,7 +195,7 @@ export default class FileUploader extends Component {
           <div className="uploadPlaceholder">
             <ul className="upload-image">
               <li>
-                <input
+                <input className="real-image-uploader"
                   type="file"
                   accept="image/*"
                   multiple={false}
@@ -205,6 +205,14 @@ export default class FileUploader extends Component {
                   onChange={() => this.handleChange()}
                   required
                 />
+                <input className="fake-image-text"
+                  type="text"
+                />
+              </li>
+              <li>
+                <button className="btn btn-primary" type="button">
+                  Select
+                </button>
               </li>
               <li>
                 <button className={submitBtnClasses} type="submit">

@@ -42,6 +42,15 @@ td {
       li {
         margin: 0
       }
+      .real-image-uploader {
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+      }
+      .fake-image-text {
+        position: relative;
+        width: 350px;
+      }
     }
   }
   .uploadedDetails {
