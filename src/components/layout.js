@@ -12,7 +12,32 @@ class Layout extends React.Component {
     this.state = {
       width: '0%',
     }
-    this.onLoadStateChange = this.onLoadStateChange.bind(this)
+    this.onLoadStateChange = this.onLoadStateChange.bind(this);
+    fetch(
+      "https://omrim2xn1h.execute-api.us-east-2.amazonaws.com/default/ingredoFit-authentication-server", 
+      {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify({
+            "code": "90a159e5cb1d3ee5b58a",
+            "state": "randomstring",
+        }) // body data type must match "Content-Type" header
+      }
+    )
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
   onLoadStateChange(width) {
     this.setState({ width })
