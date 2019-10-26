@@ -13,34 +13,45 @@ class Layout extends React.Component {
       width: '0%',
     }
     this.onLoadStateChange = this.onLoadStateChange.bind(this);
-    fetch(
-      "https://omrim2xn1h.execute-api.us-east-2.amazonaws.com/default/ingredoFit-authentication-server", 
-      {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify({
-            "code": "90a159e5cb1d3ee5b58a",
-            "state": "randomstring",
-        }) // body data type must match "Content-Type" header
-      }
-    )
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
   }
   onLoadStateChange(width) {
     this.setState({ width })
+  }
+  componentDidMount () {
+    // logic to fetch the access codes from redirected url
+    let accessCodeIndex = window.location.href.indexOf("code=");
+    let accessCode, accessRandomKey;
+    if(accessCodeIndex > -1) {
+      let queryParams = window.location.href.substring(accessCodeIndex).split("&");
+      if(queryParams.length > 0) {
+        accessCode = queryParams[0].replace("code=", "");
+        accessRandomKey = queryParams[1].replace("state=", "");
+      }
+    }
+
+    // get accesstoken only if github access code is available
+    if (accessCode) {
+      fetch(
+        'https://eoaokhk45i.execute-api.us-east-1.amazonaws.com/dev/auth/accessToken/generate', 
+        {
+          method: "POST",
+          body: JSON.stringify({
+            "code": accessCode,
+            "state": accessRandomKey,
+          })
+        }
+      )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function(data){
+        let secretAccessTokenData = JSON.parse(data);
+        console.log(secretAccessTokenData);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
   }
   render() {
     const children = React.Children.map(this.props.children, child => {

@@ -7,5 +7,6 @@ yarn-error.log
 /public
 .DS_Store
 
+# lock files
 package-lock.json
 .env.*
