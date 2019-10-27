@@ -19,7 +19,7 @@ const Header = ({ siteTitle }) => (
             </Link>
           </h1></li>
         <li>
-          <a className="login-button" href={"https://github.com/login/oauth/authorize?client_id=Iv1.c6778b1c26a766bd&redirect_uri=http://localhost:8000/&state=randomstring"}>Login</a>
+          <a className="login-button" href={"https://github.com/login/oauth/authorize?client_id=Iv1.c6778b1c26a766bd&state=randomstring" + Math.floor(Math.random() * 90 + 10)}>Login</a>
         </li>
       </ul>
     </div>

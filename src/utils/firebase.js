@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/storage';
+import 'firebase/database';
 
 const config = {
   apiKey: process.env.GATSBY_API_KEY,
@@ -8,6 +9,8 @@ const config = {
   projectId: process.env.GATSBY_PROJECT_ID,
   storageBucket: process.env.GATSBY_STORAGE_BUCKET,
   messagingSenderId: process.env.GATSBY_MESSAGING_SENDER_ID,
+  appId: process.env.GATSBY_APP_ID,
+  measurementId: process.env.GATSBY_MEASUREMENT_ID,
 }
 
 if (!firebase.apps.length) {
@@ -15,5 +18,6 @@ if (!firebase.apps.length) {
 }
 
 const storage = firebase.storage()
+const database = firebase.database();
 
-export { storage }
+export { storage, database }
