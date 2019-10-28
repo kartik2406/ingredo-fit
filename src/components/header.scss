@@ -2,9 +2,23 @@
   background: white;
 }
 
-.header .header-content {
-  margin: 0 auto;
-  padding: 1em;
+.header {
+  .header-content {
+    margin: 0 auto;
+    padding: 1em;
+    .menu-items {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+      li {
+        margin: 0;
+        &:nth-child(2) {
+          padding: 0 5em;
+        }
+      }
+    }
+  }
 }
 
 .header .header-content .app-name {

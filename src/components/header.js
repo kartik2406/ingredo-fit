@@ -1,25 +1,27 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
-import './header.css'
+import './header.scss'
 
 const Header = ({ siteTitle }) => (
-  <div
-  className="header"
-  >
-    <div
-    className="header-content"
-    >
-      <h1 className="app-name">
-        <Link
-          to="/"
-          style={{
-            textDecoration: 'none',
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
+  <div className="header">
+    <div className="header-content">
+      <ul className="menu-items">
+        <li>
+          <h1 className="app-name">
+            <Link
+              to="/"
+              style={{
+                textDecoration: 'none',
+              }}
+            >
+              {siteTitle}
+            </Link>
+          </h1></li>
+        <li>
+          <a className="login-button" href={"https://github.com/login/oauth/authorize?client_id=Iv1.c6778b1c26a766bd&state=randomstring" + Math.floor(Math.random() * 90 + 10)}>Login</a>
+        </li>
+      </ul>
     </div>
   </div>
 )
