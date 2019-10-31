@@ -32,7 +32,7 @@ class Layout extends React.Component {
     // get accesstoken only if github access code is available
     if (accessCode) {
       fetch(
-        'https://eoaokhk45i.execute-api.us-east-1.amazonaws.com/dev/auth/accessToken/generate', 
+        'https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/auth/accessToken/generate', 
         {
           method: "POST",
           body: JSON.stringify({
