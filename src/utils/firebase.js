@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import 'firebase/database';
+import 'firebase/auth';
 
 const config = {
   apiKey: process.env.GATSBY_API_KEY,
@@ -19,5 +20,6 @@ if (!firebase.apps.length) {
 
 const storage = firebase.storage()
 const database = firebase.database();
+const auth = firebase.auth;
 
-export { storage, database }
+export { storage, database, auth };

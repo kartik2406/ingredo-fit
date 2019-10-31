@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
+import { auth } from '../utils/firebase';
 
 import Header from './header'
 import './layout.scss'
@@ -11,6 +12,7 @@ class Layout extends React.Component {
     super()
     this.state = {
       width: '0%',
+      userData: {},
     }
     this.onLoadStateChange = this.onLoadStateChange.bind(this);
   }
@@ -41,14 +43,53 @@ class Layout extends React.Component {
           })
         }
       )
-      .then(function (response) {
-        return response.json();
+      .then(awsLambdaGithubAccessTokenGeneratorRes => {
+        return awsLambdaGithubAccessTokenGeneratorRes.json();
       })
-      .then(function(data){
-        let secretAccessTokenData = JSON.parse(data);
-        console.log(secretAccessTokenData);
+      .then(awsLambdaGithubAccessTokenGeneratorTransformedRes => {
+        // handle error from aws lambda githubAccessTokenGenerator
+        if(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse && awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body) {
+          // check for error body
+          let getGithubAccessTokenResponseBody = JSON.parse(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body);
+          if(getGithubAccessTokenResponseBody.error) {
+            console.log(getGithubAccessTokenResponseBody);
+          }
+          else{
+            // handle the error
+            console.log(awsLambdaGithubAccessTokenGeneratorTransformedRes);
+          }
+        }
+        else {
+          let secretAccessToken = awsLambdaGithubAccessTokenGeneratorTransformedRes.access_token;
+          let userData = awsLambdaGithubAccessTokenGeneratorTransformedRes.userData;
+          let firebaseCredentials = auth.GithubAuthProvider.credential(secretAccessToken);
+
+          // exchange the OAuth 2.0 access token for a Firebase credential 
+          auth()
+            .signInWithCredential(firebaseCredentials)
+            .then(firebaseAuthData => {
+              if(firebaseAuthData.additionalUserInfo && firebaseAuthData.additionalUserInfo.profile) {
+                this.setState({
+                  userData: firebaseAuthData.additionalUserInfo.profile,
+                });
+              }
+              else {
+                console.log(firebaseAuthData);
+              }
+            })
+            .catch(firebaseAuthError => {
+              // Handle Errors here.
+              var errorCode = firebaseAuthError.code;
+              var errorMessage = firebaseAuthError.message;
+              // The email of the user's account used.
+              var email = firebaseAuthError.email;
+              // The firebase.auth.AuthCredential type that was used.
+              var credential = firebaseAuthError.credential;
+            });
+        }
       })
       .catch(function (error) {
+        // handle error from aws lambda
         console.log(error);
       });
     }
@@ -86,7 +127,7 @@ class Layout extends React.Component {
             >
               <html lang="en" />
             </Helmet>
-            <Header siteTitle={data.site.siteMetadata.title} />
+            <Header siteTitle={data.site.siteMetadata.title} userData={this.state.userData}/>
             <div
               className="progress-bar"
               style={{ width, transition: width === '0%' ? 'none' : '1s' }}
