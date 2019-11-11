@@ -40,7 +40,8 @@ class Layout extends React.Component {
           body: JSON.stringify({
             "code": accessCode,
             "state": accessRandomKey,
-          })
+          }),
+          credentials: 'include',
         }
       )
       .then(awsLambdaGithubAccessTokenGeneratorRes => {
