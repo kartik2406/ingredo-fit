@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
-import { auth } from '../utils/firebase';
 
 import Header from './header'
 import './layout.scss'
+
+import { auth } from '../utils/authenticate.js'
 
 class Layout extends React.Component {
   constructor() {
@@ -63,30 +64,10 @@ class Layout extends React.Component {
         else {
           let secretAccessToken = awsLambdaGithubAccessTokenGeneratorTransformedRes.access_token;
           let userData = awsLambdaGithubAccessTokenGeneratorTransformedRes.userData;
-          let firebaseCredentials = auth.GithubAuthProvider.credential(secretAccessToken);
 
-          // exchange the OAuth 2.0 access token for a Firebase credential 
-          auth()
-            .signInWithCredential(firebaseCredentials)
-            .then(firebaseAuthData => {
-              if(firebaseAuthData.additionalUserInfo && firebaseAuthData.additionalUserInfo.profile) {
-                this.setState({
-                  userData: firebaseAuthData.additionalUserInfo.profile,
-                });
-              }
-              else {
-                console.log(firebaseAuthData);
-              }
-            })
-            .catch(firebaseAuthError => {
-              // Handle Errors here.
-              var errorCode = firebaseAuthError.code;
-              var errorMessage = firebaseAuthError.message;
-              // The email of the user's account used.
-              var email = firebaseAuthError.email;
-              // The firebase.auth.AuthCredential type that was used.
-              var credential = firebaseAuthError.credential;
-            });
+          this.setState({
+            userData: userData,
+          })
         }
       })
       .catch(function (error) {

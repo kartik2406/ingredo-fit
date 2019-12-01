@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { storage } from '../utils/firebase'
 import Clarifai from 'clarifai'
 import classNames from 'classnames'
 import { FOOD_DATA } from '../utils/data'
@@ -11,7 +10,7 @@ import C from '../assets/icons/c.svg'
 
 import axios from 'axios'
 
-//TODO: seperate clarifai logic into utils
+// TODO: seperate clarifai logic into utils
 
 export default class FileUploader extends Component {
   constructor(props) {
@@ -45,11 +44,11 @@ export default class FileUploader extends Component {
       ingredients: [],
     })
 
-    let signedUrlfromGcp = "https://storage.googleapis.com/ingredofit.appspot.com/IMG-20161021-WA0017.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=ingredo-fit-db-account%40ingredofit.iam.gserviceaccount.com%2F20191127%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20191127T163502Z&X-Goog-Expires=28800&X-Goog-SignedHeaders=host&X-Goog-Signature=276dac5e4aae751bf988c1f2478981da47417a713f1502f6592823cae9c1fa126e25f2bac63bc1e910357ce598191d957a0a8564b62f087b8f52513a89dbabeb2e9a69734cff26aeb9b49847095c6ec1d220f8606613fc1fb22a77bc19b7c75d933e5243b7fa4f8c513c82a4ecd2784541831a0fb65c8b89dbb5ebd870fafda628aafd24f48d2073cacfbed83c8c8772ba325dbd0f0d94f871241eb14f45fd183f27726104fe8f0eda139d4c09935c79c9bdadd234068f604ed413cc327c3952e70c218ab4f0b2c0a0b65252a0ae94f321b4f643ec340eb474fe496af8648d57d668a3a0f984c8bdcfa3d1b6ab63d099b76a28a08034c54483b78412d0a0db61";
+    let signedUrlfromGcp = "https://storage.googleapis.com/ingredofit.appspot.com/IMG-20161021-WA0017.jpg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=ingredo-fit-db-account%40ingredofit.iam.gserviceaccount.com%2F20191201%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20191201T111638Z&X-Goog-Expires=28801&X-Goog-SignedHeaders=host&X-Goog-Signature=79c0f8739b2345ccb5cedf59a32748c749dc2888d41d994722fe4a4344655b275a95e8f1a849386922aa03c137d900ddcd5bc42c9fe758f3e4f1ad71fcefe91eff230de82c0364a2f6715b7377f7a6e3a5944b359f4312492d22725c7a6a4d236dd2dfd56493d89569317ded1c616a4d89ca2d6602f879454e773cad8a2ab7b3bef4a42ba25481b2a33f630128cd2b067e63cc957842aafcaff861b83b29d932c4cde4f8497919df2a16349aa37ea5e77e6c7cebbd6b4c934497f64fd5bee0f5c9288c009014aecb974fc0d8b0bb242be3d4949e3e06c4e3d237c715eef0088df83f6f71d537b1de2e7b0adbf9928dd386cac05790ba2db16570de0d9bd541b7";
 
     axios.put(signedUrlfromGcp, file, {
         headers: {
-          'Content-Type': file.type
+          'Content-Type': file.type,
         }
     })
     .then(res =>{
