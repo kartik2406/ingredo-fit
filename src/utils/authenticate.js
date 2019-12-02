@@ -1,7 +1,7 @@
-const auth = {
-    init: () => {
-
+const authenticate = {
+    githubAccessCodeForCsrf: () => {
+        
     },
 }
 
-export { auth };
+export { authenticate };

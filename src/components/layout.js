@@ -6,7 +6,7 @@ import { StaticQuery, graphql } from 'gatsby'
 import Header from './header'
 import './layout.scss'
 
-import { auth } from '../utils/authenticate.js'
+import { authenticate } from '../utils/authenticate.js'
 
 class Layout extends React.Component {
   constructor() {
@@ -62,7 +62,6 @@ class Layout extends React.Component {
           }
         }
         else {
-          let secretAccessToken = awsLambdaGithubAccessTokenGeneratorTransformedRes.access_token;
           let userData = awsLambdaGithubAccessTokenGeneratorTransformedRes.userData;
 
           this.setState({
