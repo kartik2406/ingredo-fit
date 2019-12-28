@@ -34,13 +34,18 @@ class Layout extends React.Component {
     }
 
     // get accesstoken only if github access code is available
+    // when the login is triggered a new window is opened and 
+    // callback receives accessCode and accessRandomKey
     if (accessCode) {
       window.opener.accessCode = accessCode;
       window.opener.accessRandomKey = accessRandomKey;
       window.close();
     }
-
-    this.checkUser();
+    // if not login then its primary window
+    // fetch the user data with set valid cookie
+    else {
+      this.checkUser();
+    }
   }
   checkUser() {
     fetch(
