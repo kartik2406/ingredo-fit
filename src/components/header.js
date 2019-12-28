@@ -7,7 +7,6 @@ const Header = ({ siteTitle, userData, userLogin }) => {
   let checkAccessCodeTimerReference;
   let authenticate = event => {
     let authUrl = "https://github.com/login/oauth/authorize?client_id=Iv1.c6778b1c26a766bd&state=randomstring" + Math.floor(Math.random() * 90 + 10)
-    authUrl = "http://localhost:8000/?code=2ea8269fcc8765b13638&state=randomstring54"
     window.open(authUrl, "_blank", 'location=yes,height=570,width=520,scrollbars=yes,status=yes')
 
     checkAccessCodeTimerReference = setTimeout(checkAccessCode, 500)
@@ -16,8 +15,8 @@ const Header = ({ siteTitle, userData, userLogin }) => {
   // check if Access Code is returned
   let checkAccessCode = () => {
     if(window.accessCode) {
-      userLogin()
       clearTimeout(checkAccessCodeTimerReference)
+      userLogin()
     }
     else {
       checkAccessCodeTimerReference = setTimeout(checkAccessCode, 500)

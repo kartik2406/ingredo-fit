@@ -16,6 +16,7 @@ class Layout extends React.Component {
       userData: {},
     }
     this.onLoadStateChange = this.onLoadStateChange.bind(this);
+    this.userLogin = this.userLogin.bind(this);
   }
   onLoadStateChange(width) {
     this.setState({ width })
@@ -41,7 +42,7 @@ class Layout extends React.Component {
   }
   userLogin() {
     fetch(
-      'https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/auth/accessToken/generate', 
+      'https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/user/login',
       {
         method: "POST",
         body: JSON.stringify({
@@ -51,34 +52,27 @@ class Layout extends React.Component {
         credentials: 'include',
       }
     )
-    .then(awsLambdaGithubAccessTokenGeneratorRes => {
-      return awsLambdaGithubAccessTokenGeneratorRes.json();
+    .then(res => {
+      if(res.status == 200)
+        return res.json();
+      else
+        return res.text();
     })
-    .then(awsLambdaGithubAccessTokenGeneratorTransformedRes => {
-      // handle error from aws lambda githubAccessTokenGenerator
-      if(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse && awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body) {
-        // check for error body
-        let getGithubAccessTokenResponseBody = JSON.parse(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body);
-        if(getGithubAccessTokenResponseBody.error) {
-          console.log(getGithubAccessTokenResponseBody);
-        }
-        else{
-          // handle the error
-          console.log(awsLambdaGithubAccessTokenGeneratorTransformedRes);
-        }
+    .then(res => {
+      // handle error from aws lambda githubAccessExchange
+      if(res.login) {
+        this.setState({
+          userData: res,
+        })
       }
       else {
-        let userData = awsLambdaGithubAccessTokenGeneratorTransformedRes.userData;
-  
-        this.setState({
-          userData: userData,
-        })
+        console.log(res)
       }
     })
     .catch(function (error) {
       // handle error from aws lambda
-      console.log(error);
-    });
+      console.log(error)
+    })
   }
   render() {
     const children = React.Children.map(this.props.children, child => {
