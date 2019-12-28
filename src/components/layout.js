@@ -34,46 +34,51 @@ class Layout extends React.Component {
 
     // get accesstoken only if github access code is available
     if (accessCode) {
-      fetch(
-        'https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/auth/accessToken/generate', 
-        {
-          method: "POST",
-          body: JSON.stringify({
-            "code": accessCode,
-            "state": accessRandomKey,
-          }),
-          credentials: 'include',
-        }
-      )
-      .then(awsLambdaGithubAccessTokenGeneratorRes => {
-        return awsLambdaGithubAccessTokenGeneratorRes.json();
-      })
-      .then(awsLambdaGithubAccessTokenGeneratorTransformedRes => {
-        // handle error from aws lambda githubAccessTokenGenerator
-        if(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse && awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body) {
-          // check for error body
-          let getGithubAccessTokenResponseBody = JSON.parse(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body);
-          if(getGithubAccessTokenResponseBody.error) {
-            console.log(getGithubAccessTokenResponseBody);
-          }
-          else{
-            // handle the error
-            console.log(awsLambdaGithubAccessTokenGeneratorTransformedRes);
-          }
-        }
-        else {
-          let userData = awsLambdaGithubAccessTokenGeneratorTransformedRes.userData;
-
-          this.setState({
-            userData: userData,
-          })
-        }
-      })
-      .catch(function (error) {
-        // handle error from aws lambda
-        console.log(error);
-      });
+      window.opener.accessCode = accessCode;
+      window.opener.accessRandomKey = accessRandomKey;
+      window.close();
     }
+  }
+  userLogin() {
+    fetch(
+      'https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/auth/accessToken/generate', 
+      {
+        method: "POST",
+        body: JSON.stringify({
+          "code": window.accessCode,
+          "state": window.accessRandomKey,
+        }),
+        credentials: 'include',
+      }
+    )
+    .then(awsLambdaGithubAccessTokenGeneratorRes => {
+      return awsLambdaGithubAccessTokenGeneratorRes.json();
+    })
+    .then(awsLambdaGithubAccessTokenGeneratorTransformedRes => {
+      // handle error from aws lambda githubAccessTokenGenerator
+      if(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse && awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body) {
+        // check for error body
+        let getGithubAccessTokenResponseBody = JSON.parse(awsLambdaGithubAccessTokenGeneratorTransformedRes.getGithubAccessTokenResponse.body);
+        if(getGithubAccessTokenResponseBody.error) {
+          console.log(getGithubAccessTokenResponseBody);
+        }
+        else{
+          // handle the error
+          console.log(awsLambdaGithubAccessTokenGeneratorTransformedRes);
+        }
+      }
+      else {
+        let userData = awsLambdaGithubAccessTokenGeneratorTransformedRes.userData;
+  
+        this.setState({
+          userData: userData,
+        })
+      }
+    })
+    .catch(function (error) {
+      // handle error from aws lambda
+      console.log(error);
+    });
   }
   render() {
     const children = React.Children.map(this.props.children, child => {
@@ -82,7 +87,7 @@ class Layout extends React.Component {
       })
     })
     let { width } = this.state
-    //reset the progress once 100%
+    // reset the progress once 100%
     if (width === '100%') {
       setTimeout(() => this.setState({ width: '0%' }), 1000)
     }
@@ -108,7 +113,7 @@ class Layout extends React.Component {
             >
               <html lang="en" />
             </Helmet>
-            <Header siteTitle={data.site.siteMetadata.title} userData={this.state.userData}/>
+            <Header siteTitle={data.site.siteMetadata.title} userData={this.state.userData} userLogin={this.userLogin}/>
             <div
               className="progress-bar"
               style={{ width, transition: width === '0%' ? 'none' : '1s' }}
