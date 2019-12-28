@@ -33,30 +33,50 @@ export default class FileUploader extends Component {
       fileName: event.target.files[0].name,
     })
   }
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
 
     let { onLoadStateChange } = this.props
-    onLoadStateChange('25%') //start the loader
+    onLoadStateChange('25%') // start the loader
     const file = this.fileInput.files[0]
+    const fileType = file.type
     this.setState({
       uploadedImage: null,
       ingredients: [],
     })
 
-    let signedUrlfromGcp = "https://storage.googleapis.com/ingredofit.appspot.com/26397695/c69fe7b0-24aa-11ea-8000-01_26397695.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=ingredo-fit-db-account%40ingredofit.iam.gserviceaccount.com%2F20191222%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20191222T110416Z&X-Goog-Expires=28793&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=52a3cd75cf2e8b3bf1175c5279d734b71efc5f2e1837bfec1ed61e74f8844e1ede90778084bfd4a31288198ca09cc54c747219b50152009bcbb939d7d545be048762bd1b9c6db1d60bf8671b715815439848ed9d9a24b28530998510d24b74c7413dc462436432ab000046f88349470f3cc3321fea27a5d43a01596f77e927239f764e97b89a6a8b4327aad6220222ad149d59977b5db8b5706c3b4474fab41061a87dfde914628029e4ca7f88b3b960dbfd750df07e8e81a8273d1d053c56d192931b8ffe2dd213d0bc017781d0c7484db084bac9315ea0428b12669e5dac05dbda43ecd2827fa4f85c0732b821adb5b7291fcff2ca67913ca828348a79e92e";
+    // fetch the signed url for file upload
+    let getSignedUrlForStorage = await axios.get(
+      "https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/file/signedUrl",
+      {
+        params: {
+          fileType
+        },
+      }
+    )
 
-    axios.put(signedUrlfromGcp, file, {
+    // handle the error for fetching the signed URL
+    if(getSignedUrlForStorage.error) {
+      console.log(getSignedUrlForStorage.error)
+    }
+    // PUT the file on GCP bucket
+    else {
+      let putFileInGcpBucket = await axios.put(getSignedUrlForStorage, file, {
         headers: {
-          'Content-Type': file.type,
+          'Content-Type': fileType,
         }
-    })
-    .then(res =>{
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err)
-    });
+      })
+
+      // handle the error uploading the file to GCP Bucket
+      if(putFileInGcpBucket.error) {
+        console.log(putFileInGcpBucket.error)
+      }
+      // fetch the url of the uploaded file and
+      // the details of the Clarifai ingredients API
+      else {
+
+      }
+    }
   }
   handleSelect() {
     this.fileInput.click()
