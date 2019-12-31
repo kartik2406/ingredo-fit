@@ -6,8 +6,6 @@ import { StaticQuery, graphql } from 'gatsby'
 import Header from './header'
 import './layout.scss'
 
-import { authenticate } from '../utils/authenticate.js'
-
 class Layout extends React.Component {
   constructor() {
     super()
