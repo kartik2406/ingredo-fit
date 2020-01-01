@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import { storage } from '../utils/firebase'
-import Clarifai from 'clarifai'
 import classNames from 'classnames'
-import { FOOD_DATA } from '../utils/data'
 import './fileUploader.scss'
 import Food from '../assets/icons/food.svg'
 import Calorie from '../assets/icons/calorie.svg'
 import Protein from '../assets/icons/protein.svg'
 import C from '../assets/icons/c.svg'
 
-//TODO: seperate clarifai logic into utils
+import axios from 'axios'
 
 export default class FileUploader extends Component {
   constructor(props) {
@@ -22,9 +19,6 @@ export default class FileUploader extends Component {
       fileName: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.app = new Clarifai.App({
-      apiKey: 'a62c9413669344ca8c4968130516a84b',
-    })
   }
   handleChange(event) {
     this.setState({
@@ -32,81 +26,80 @@ export default class FileUploader extends Component {
       fileName: event.target.files[0].name,
     })
   }
-  handleSubmit(event) {
-    let { onLoadStateChange } = this.props
-    onLoadStateChange('25%') //start the loader
+  async handleSubmit(event) {
     event.preventDefault()
+
+    let { onLoadStateChange } = this.props
+    onLoadStateChange('25%') // start the loader
     const file = this.fileInput.files[0]
+    const fileType = file.type
     this.setState({
       uploadedImage: null,
       ingredients: [],
     })
-    let uploadTask = storage
-      .ref()
-      .child(file.name)
-      .put(file)
 
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        // Handle progress of upload
-        let progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        )
-        this.setState({ progress })
-      },
-      error => {
-        // Handle unsuccessful upload
-      },
-      () => {
-        // Handle successful upload
-        this.setState({
-          progress: 100,
-        })
-        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-          console.log(`Your uploaded image is now available at ${downloadURL}`)
-          this.setState({
-            uploadedImage: downloadURL,
-          })
-          this.setImage(downloadURL)
-          onLoadStateChange('75%')
-        })
+    // fetch the signed url for file upload
+    let getSignedUrlForStorage = await axios.get(
+      "https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/file/signedUrl",
+      {
+        params: {
+          fileType
+        },
+        withCredentials: true,
       }
     )
+
+    // handle the error for fetching the signed URL
+    if(getSignedUrlForStorage.status !== 200) {
+      console.log(getSignedUrlForStorage.statusText)
+    }
+    // PUT the file on GCP bucket
+    else {
+      let putFileInGcpBucket = await axios.put(getSignedUrlForStorage.data.uploadedFileData.url, file, {
+        headers: {
+          'Content-Type': fileType,
+        },
+      })
+
+      // handle the error uploading the file to GCP Bucket
+      if(putFileInGcpBucket.status !== 200) {
+        console.log(putFileInGcpBucket.statusText)
+      }
+      // fetch the url of the uploaded file and
+      // the details of the Clarifai ingredients API
+      else {
+        // after fetching the clarifai ingredients 
+        // from the aws lambda api
+        let fetchUploadedImageData = await axios(
+          "https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/file/signedUrlAndIngredients",
+          {
+            params: {
+              fileName: getSignedUrlForStorage.data.uploadedFileData.uploadedFileName,
+            },
+            withCredentials: true,
+          }
+        )
+        if(fetchUploadedImageData.status !== 200) {
+          console.log(fetchUploadedImageData.statusText)
+        }
+        else {
+          this.setDataOfSelectedImage(fetchUploadedImageData.data.url, fetchUploadedImageData.data.ingredients)
+        }
+      }
+    }
   }
   handleSelect() {
     this.fileInput.click()
   }
-  setImage(url) {
+  setDataOfSelectedImage(url, ingredients) {
     let { onLoadStateChange } = this.props
 
-    this.app.models.predict('bd367be194cf45149e75f01d59f77ba7', url).then(
-      response => {
-        console.log(response)
-        // do something with response
-        let concepts = response['outputs'][0]['data']['concepts']
-
-        let ingredients = concepts.map(concept => {
-          let ingredient = FOOD_DATA.find(food => food.name === concept.name)
-          return {
-            ...concept,
-            ...ingredient,
-          }
-        })
-        // console.log(concepts)
-        this.setState({
-          ingredients,
-        })
-
-        console.log('concepts', this.state.ingredients)
-        onLoadStateChange('100%')
-      },
-      err => {
-        // there was an error
-      }
-    )
+    onLoadStateChange('100%')
+    this.setState({
+      uploadedImage: url,
+      ingredients: ingredients
+    })
   }
-
   render() {
     let { uploadedImage, ingredients, fileSelected, fileName } = this.state
     const submitBtnClasses = classNames('btn', 'btn-primary', {
