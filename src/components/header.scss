@@ -11,9 +11,12 @@
       li {
         margin: 0;
         .login-button {
+          background: none;
+          border: none;
+          color: #1f9389;
           padding: 0 5em;
           @media only screen and (max-width: 540px) {
-            padding: 0;
+            padding: 0 1em;
           }
         }
         .avatar-image {

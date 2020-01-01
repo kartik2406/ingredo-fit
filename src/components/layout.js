@@ -20,29 +20,38 @@ class Layout extends React.Component {
     this.setState({width})
   }
   componentDidMount () {
-    // logic to fetch the access codes from redirected url
-    let accessCodeIndex = window.location.href.indexOf("code=");
-    let accessCode, accessRandomKey;
-    if(accessCodeIndex > -1) {
-      let queryParams = window.location.href.substring(accessCodeIndex).split("&");
-      if(queryParams.length > 0) {
-        accessCode = queryParams[0].replace("code=", "");
-        accessRandomKey = queryParams[1].replace("state=", "");
+    // if window.accessCode is false, that means either this is a 
+    // child window with href containing a code
+    // or parent window of the mobile device
+    if(!window.accessCode) {
+      // logic to fetch the access codes from redirected url
+      let accessCodeIndex = window.location.href.indexOf("code=")
+      let accessCode, accessRandomKey
+      if(accessCodeIndex > -1) {
+        let queryParams = window.location.href.substring(accessCodeIndex).split("&")
+        if(queryParams.length > 0) {
+          accessCode = queryParams[0].replace("code=", "")
+          accessRandomKey = queryParams[1].replace("state=", "")
+
+          // if the client device is desktop
+          if(window.opener) {
+            window.opener.accessCode = accessCode
+            window.opener.accessRandomKey = accessRandomKey
+            window.close()
+          }
+          // else its a mobile device
+          else {
+            window.accessCode = accessCode
+            window.accessRandomKey = accessRandomKey
+            this.userLogin()
+          }
+        }
       }
     }
-
-    // get accesstoken only if github access code is available
-    // when the login is triggered a new window is opened and 
-    // callback receives accessCode and accessRandomKey
-    if (accessCode) {
-      window.opener.accessCode = accessCode;
-      window.opener.accessRandomKey = accessRandomKey;
-      window.close();
-    }
-    // if not login then its primary window
+    // if not login then this is a primary window
     // fetch the user data with set valid cookie
     else {
-      this.checkUser();
+      this.checkUser()
     }
   }
   checkUser() {
@@ -54,10 +63,10 @@ class Layout extends React.Component {
       }
     )
     .then(res => {
-      if(res.status == 200)
-        return res.json();
+      if(res.status === 200)
+        return res.json()
       else
-        return res.text();
+        return res.text()
     })
     .then(res => {
       // handle error from aws lambda githubAccessExchange
@@ -88,10 +97,10 @@ class Layout extends React.Component {
       }
     )
     .then(res => {
-      if(res.status == 200)
-        return res.json();
+      if(res.status === 200)
+        return res.json()
       else
-        return res.text();
+        return res.text()
     })
     .then(res => {
       // handle error from aws lambda githubAccessExchange
