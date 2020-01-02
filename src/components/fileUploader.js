@@ -40,7 +40,7 @@ export default class FileUploader extends Component {
 
     // fetch the signed url for file upload
     let getSignedUrlForStorage = await axios.get(
-      "https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/file/signedUrl",
+      "https://j6kd67te30.execute-api.us-east-1.amazonaws.com/uat/file/signedUrl",
       {
         params: {
           fileType
@@ -71,7 +71,7 @@ export default class FileUploader extends Component {
         // after fetching the clarifai ingredients 
         // from the aws lambda api
         let fetchUploadedImageData = await axios(
-          "https://9107d8n8y2.execute-api.us-east-1.amazonaws.com/dev/file/signedUrlAndIngredients",
+          "https://j6kd67te30.execute-api.us-east-1.amazonaws.com/uat/file/signedUrlAndIngredients",
           {
             params: {
               fileName: getSignedUrlForStorage.data.uploadedFileData.uploadedFileName,

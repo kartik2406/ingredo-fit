@@ -6,7 +6,7 @@ import './header.scss'
 const Header = ({ siteTitle, userData, userLogin }) => { 
   let checkAccessCodeTimerReference;
   let authenticate = event => {
-    let authUrl = "https://github.com/login/oauth/authorize?client_id=Iv1.c6778b1c26a766bd&state=randomstring" + Math.floor(Math.random() * 90 + 10)
+    let authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}&state=randomstring` + Math.floor(Math.random() * 90 + 10)
     
     if(window.innerWidth < 500) {
       window.location = authUrl
