@@ -56,7 +56,7 @@ class Layout extends React.Component {
   }
   checkUser() {
     fetch(
-      'https://j6kd67te30.execute-api.us-east-1.amazonaws.com/uat/user/profile',
+      process.env.URL_USER_DATA,
       {
         method: "GET",
         credentials: 'include',
@@ -86,7 +86,7 @@ class Layout extends React.Component {
   }
   userLogin() {
     fetch(
-      'https://j6kd67te30.execute-api.us-east-1.amazonaws.com/uat/user/login',
+      process.env.URL_USER_LOGIN,
       {
         method: "POST",
         body: JSON.stringify({
