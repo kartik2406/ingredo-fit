@@ -1,13 +1,10 @@
 import React from 'react'
 
-import UserData from '../components/userData'
-import FileUploader from '../components/fileUploader'
+import Layout from '../components/layout'
 import './index.css'
 
 const IndexPage = ({onLoadStateChange}) => (
-  <UserData>
-    <FileUploader onLoadStateChange={onLoadStateChange}/>
-  </UserData>
+  <Layout onLoadStateChange={onLoadStateChange}></Layout>
 )
 
 export default IndexPage
