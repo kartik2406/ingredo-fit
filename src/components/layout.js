@@ -132,7 +132,7 @@ class Layout extends React.Component {
                 </div>
               </div>
               <Switch>
-                <Route path="/" component={UserData}>
+                <Route exact path="/" component={UserData}>
                   <FileUploader />
                 </Route>
                 <Route path="/login" component={Login} />
