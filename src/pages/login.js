@@ -1,5 +1,5 @@
 import React from "react"
-import { Redirect } from "react-router-dom"
+import { useHistory } from "react-router"
 
 class Login extends React.Component {
 	constructor(props) {
@@ -27,7 +27,10 @@ class Login extends React.Component {
 				else {
 					window.accessCode = accessCode
 					window.accessRandomKey = accessRandomKey
-					// this.userLogin()
+
+					// need to use hooks or else this below line wont work
+					let history = useHistory();
+					history.push("/")
 				}
 			}
 		}
@@ -47,13 +50,9 @@ class Login extends React.Component {
 					if(window.accessCode) {
 						clearTimeout(checkAccessCodeTimerReference)
 
-						// this userLogin is global and will
-						// be coming from layout
-						// userLogin()
-
-						this.setState({
-							redirect: true,
-						})
+						// need to use hooks or else this below line wont work
+						let history = useHistory();
+						history.push("/")
 					}
 					else {
 						checkAccessCodeTimerReference = setTimeout(checkAccessCode, 500)
@@ -65,19 +64,7 @@ class Login extends React.Component {
 		}
 	}
 	render() {
-		return (
-			<>
-			{
-				this.state.redirect ?
-					<Redirect
-						to={{
-							pathname: "/"
-						}}
-					></Redirect> :
-					"loading..."
-			}
-			</>
-		)
+		return <>loading...</>
 	}
 }
 

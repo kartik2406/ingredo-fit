@@ -4,6 +4,9 @@ import PropTypes from "prop-types"
 class UserData extends React.Component {
 	constructor(props) {
 		super()
+		this.state = {
+			width: '0%',
+		}
 		this.onLoadStateChange = this.onLoadStateChange.bind(this);
 	}
 	onLoadStateChange(width) {

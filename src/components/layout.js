@@ -1,14 +1,12 @@
 import React from "react"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import Helmet from "react-helmet"
 import { StaticQuery, graphql } from "gatsby"
 
 import "./layout.scss"
-import "./header.scss"
 
+import Header from "./header"
 import UserData from "./userData"
 import FileUploader from "./fileUploader"
-import Login from "./login"
 
 const checkUser = () => {
   fetch(
@@ -99,45 +97,19 @@ class Layout extends React.Component {
 				`}
 				render={data => (
           <layoutContext.Provider>
-            <Router>
-              <Helmet
-                title={data.site.siteMetadata.title}
-                meta={[
-                  { name: 'description', content: 'Track your calorie with our app.' },
-                  { name: 'keywords', content: 'food, fitness' },
-                ]}
-              >
-                <html lang="en" />
-              </Helmet>
-              <div className="header">
-                <div className="header-content">
-                  <ul className="menu-items">
-                    <li>
-                      <h1 className="app-name">
-                        <Link
-                          to="/"
-                          style={{
-                            textDecoration: 'none',
-                          }}
-                        >
-                          {data.site.siteMetadata.title}
-                        </Link>
-                      </h1></li>
-                    <li>
-                      {
-                        this.state.userData.avatar_url ? <button className="login-button"><img className="avatar-image" src={this.state.userData.avatar_url} alt="users avatar" /></button> : <Link className="login-button" to="/login">Login</Link>
-                      }
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <Switch>
-                <Route exact path="/" component={UserData}>
-                  <FileUploader />
-                </Route>
-                <Route path="/login" component={Login} />
-              </Switch>
-            </Router>
+            <Helmet
+              title={data.site.siteMetadata.title}
+              meta={[
+                { name: 'description', content: 'Track your calorie with our app.' },
+                { name: 'keywords', content: 'food, fitness' },
+              ]}
+            >
+              <html lang="en" />
+            </Helmet>
+            <Header siteTitle={data.site.siteMetadata.title} userData={this.state.userData} />
+            <UserData>
+              <FileUploader />
+            </UserData>
           </layoutContext.Provider>
         )}
       />
