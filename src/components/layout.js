@@ -8,7 +8,7 @@ import Header from "./header"
 import UserData from "./userData"
 import FileUploader from "./fileUploader"
 
-const checkUser = () => {
+const checkUser = (layoutThisObject) => {
   fetch(
     process.env.URL_USER_DATA,
     {
@@ -25,7 +25,7 @@ const checkUser = () => {
   .then(res => {
     // handle error from aws lambda githubAccessExchange
     if (res.login) {
-      this.setState({
+      layoutThisObject.setState({
         userData: res,
       })
     }
@@ -38,7 +38,7 @@ const checkUser = () => {
     console.log(error)
   })
 }
-const userLogin = () => {
+const userLogin = (layoutThisObject) => {
   fetch(
     process.env.URL_USER_LOGIN,
     {
@@ -59,7 +59,7 @@ const userLogin = () => {
   .then(res => {
     // handle error from aws lambda githubAccessExchange
     if (res.login) {
-      this.setState({
+      layoutThisObject.setState({
         userData: res,
       })
     }
@@ -73,15 +73,22 @@ const userLogin = () => {
   })
 }
 
-const layoutContext = React.createContext(userLogin)
+const layoutContext = React.createContext()
 
 class Layout extends React.Component {
+  static contextType = layoutContext
   constructor() {
     super()
     this.state = {
 			width: '0%',
 			userData: {},
-		}
+    }
+  }
+  componentDidMount() {
+    if(window.accessCode) 
+      userLogin(this)
+    else
+      checkUser(this)
   }
   render() {
     return (
