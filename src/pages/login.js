@@ -35,7 +35,7 @@ class Login extends Component {
 			}
 		}
 		else {
-			let authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}&scope=read:user&state=randomstring` + Math.floor(Math.random() * 90 + 10)
+			let authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GATSBY_CLIENT_ID}&scope=read:user&state=randomstring` + Math.floor(Math.random() * 90 + 10)
 
 			if (window.innerWidth < 500) {
 				window.location = authUrl
