@@ -10,7 +10,7 @@ import FileUploader from "./fileUploader"
 
 const checkUser = (layoutThisObject) => {
   fetch(
-    process.env.URL_USER_DATA,
+    process.env.GATSBY_URL_USER_DATA,
     {
       method: "GET",
       credentials: 'include',
@@ -40,7 +40,7 @@ const checkUser = (layoutThisObject) => {
 }
 const userLogin = (layoutThisObject) => {
   fetch(
-    process.env.URL_USER_LOGIN,
+    process.env.GATSBY_URL_USER_LOGIN,
     {
       method: "POST",
       body: JSON.stringify({
