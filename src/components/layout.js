@@ -6,6 +6,7 @@ import "./layout.scss"
 
 import Header from "./header"
 import UserData from "./userData"
+import FileListing from "./fileListing"
 import FileUploader from "./fileUploader"
 
 const checkUser = (layoutThisObject) => {
@@ -115,6 +116,7 @@ class Layout extends React.Component {
             </Helmet>
             <Header siteTitle={data.site.siteMetadata.title} userData={this.state.userData} />
             <UserData>
+              <FileListing userData={this.state.userData}/>
               <FileUploader />
             </UserData>
           </layoutContext.Provider>
