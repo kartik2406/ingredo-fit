@@ -5,12 +5,16 @@ import "./fileListing.scss"
 
 const deleteFile = async event => {
 	event.preventDefault()
+
 	let fileName = event.currentTarget.dataset.filename
+	let jwt = event.currentTarget.dataset.jwt
+
 	let deleteFileStatus = await axios.delete(
-		process.env.GATSBY_URL_SIGNED_FILE_UPLOAD,
+		process.env.GATSBY_URL_DELETE_FILE,
 		{
 			params: {
-				fileName
+				fileName,
+				jwt,
 			},
 			withCredentials: true,
 		}
@@ -30,7 +34,7 @@ export default function fileListing(props) {
 				props.userData ?
 					props.userData.filesList ?
 						props.userData.filesList.map(
-							(file, index) => <li key={index}>{file} <button data-filename={file} onClick={deleteFile}>x</button></li>
+							(file, index) => <li key={index}>{file.name} <button data-filename={file.name} data-fileurl={file.url} data-jwt={props.jwt} onClick={deleteFile}>x</button></li>
 						)
 						: ""
 					: ""

@@ -18,23 +18,22 @@ const checkUser = (layoutThisObject) => {
     }
   )
   .then(res => {
-    if (res.status === 200)
-      return res.json()
-    else
-      return res.text()
+    return res.text()
   })
   .then(res => {
+    const parsedResponse = JSON.parse(atob(res.split('.')[1]))
     // handle error from aws lambda githubAccessExchange
-    if (res.login) {
+    if (parsedResponse.login) {
       layoutThisObject.setState({
-        userData: res,
+        userData: parsedResponse,
+        jwt: res,
       })
     }
     else {
-      console.log(res)
+      console.log(parsedResponse)
     }
   })
-  .catch(function (error) {
+  .catch(error => {
     // handle error from aws lambda
     console.log(error)
   })
@@ -52,23 +51,22 @@ const userLogin = (layoutThisObject) => {
     }
   )
   .then(res => {
-    if (res.status === 200)
-      return res.json()
-    else
-      return res.text()
+    return res.text()
   })
   .then(res => {
+    const parsedResponse = JSON.parse(atob(res.split('.')[1]))
     // handle error from aws lambda githubAccessExchange
-    if (res.login) {
+    if (parsedResponse.login) {
       layoutThisObject.setState({
-        userData: res,
+        userData: parsedResponse,
+        jwt: res,
       })
     }
     else {
-      console.log(res)
+      console.log(parsedResponse)
     }
   })
-  .catch(function (error) {
+  .catch(error => {
     // handle error from aws lambda
     console.log(error)
   })
@@ -82,7 +80,8 @@ class Layout extends React.Component {
     super()
     this.state = {
 			width: '0%',
-			userData: {},
+      userData: {},
+      jwt: "",
     }
   }
   componentDidMount() {
@@ -116,8 +115,8 @@ class Layout extends React.Component {
             </Helmet>
             <Header siteTitle={data.site.siteMetadata.title} userData={this.state.userData} />
             <UserData>
-              <FileListing userData={this.state.userData}/>
               <FileUploader />
+              <FileListing userData={this.state.userData} jwt={this.state.jwt}/>
             </UserData>
           </layoutContext.Provider>
         )}
