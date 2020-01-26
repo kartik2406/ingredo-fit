@@ -1,6 +1,7 @@
 import React from "react"
 import Helmet from "react-helmet"
 import { StaticQuery, graphql } from "gatsby"
+import jwtDecode from "jwt-decode"
 
 import "./layout.scss"
 
@@ -21,16 +22,16 @@ const checkUser = (layoutThisObject) => {
     return res.text()
   })
   .then(res => {
-    const parsedResponse = JSON.parse(atob(res.split('.')[1]))
+    const decodedResponse = jwtDecode(res)
     // handle error from aws lambda githubAccessExchange
-    if (parsedResponse.login) {
+    if (decodedResponse.login) {
       layoutThisObject.setState({
-        userData: parsedResponse,
+        userData: decodedResponse,
         jwt: res,
       })
     }
     else {
-      console.log(parsedResponse)
+      console.log(decodedResponse)
     }
   })
   .catch(error => {
@@ -54,16 +55,16 @@ const userLogin = (layoutThisObject) => {
     return res.text()
   })
   .then(res => {
-    const parsedResponse = JSON.parse(atob(res.split('.')[1]))
+    const decodedResponse = jwtDecode(res)
     // handle error from aws lambda githubAccessExchange
-    if (parsedResponse.login) {
+    if (decodedResponse.login) {
       layoutThisObject.setState({
-        userData: parsedResponse,
+        userData: decodedResponse,
         jwt: res,
       })
     }
     else {
-      console.log(parsedResponse)
+      console.log(decodedResponse)
     }
   })
   .catch(error => {
