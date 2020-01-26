@@ -73,6 +73,24 @@ const userLogin = (layoutThisObject) => {
   })
 }
 
+const tmpfunction = thiObject => {
+  var data = {};
+	data.firstname = "John2";
+	data.lastname  = "Snow2";
+	var json = JSON.stringify(data);
+
+	// Delete a user
+	var url = "https://o16nr5ng05.execute-api.us-east-1.amazonaws.com/dev/file/storage";
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	xhr.open("DELETE", url, true);
+	xhr.onload = function () {
+		if (xhr.readyState == 4 && xhr.status == "200")
+			console.log(xhr.responseText);
+	}
+	xhr.send(json);
+}
+
 const layoutContext = React.createContext()
 
 class Layout extends React.Component {
@@ -86,10 +104,12 @@ class Layout extends React.Component {
     }
   }
   componentDidMount() {
-    if(window.accessCode) 
-      userLogin(this)
-    else
-      checkUser(this)
+    // if(window.accessCode) 
+    //   userLogin(this)
+    // else
+    //   checkUser(this)
+
+    tmpfunction(this)
   }
   render() {
     return (
